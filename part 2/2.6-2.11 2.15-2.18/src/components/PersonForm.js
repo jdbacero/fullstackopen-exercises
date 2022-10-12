@@ -1,9 +1,8 @@
 import { useState } from "react"
 import phonebookService from "../service/phonebook"
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setNotification }) => {
 
     const [newPerson, setNewPerson] = useState({ name: '', number: '' })
-
     const handlePersonChange = (e) => setNewPerson({ ...newPerson, [e.target.name]: e.target.value, id: persons.length + 1 })
 
     const addPhonebook = (e) => {
@@ -16,6 +15,10 @@ const PersonForm = ({ persons, setPersons }) => {
                 phonebookService.update(person.id, { ...person, number: newPerson.number })
                     .then(updatedPerson => {
                         setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
+                        setNotification({ message: `Updated ${updatedPerson.name}'s number.`, type: "update" })
+                    })
+                    .catch(e => {
+                        setNotification({ message: `Information of ${person.name} has already been removed from the server.`, type: 'error' })
                     })
             }
             setNewPerson({ name: '', number: '' })
@@ -26,6 +29,7 @@ const PersonForm = ({ persons, setPersons }) => {
             .then(person => {
                 setPersons(persons.concat({ ...person }))
                 setNewPerson({ name: '', number: '' })
+                setNotification({ message: `Added ${person.name}`, type: "create" })
             })
     }
 

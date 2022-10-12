@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import noteService from './services/notes'
 import Note from './component/Note'
+import Notification from './component/Notification'
+import './index.css'
 
 const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   useEffect(() => {
     noteService.getAll()
@@ -49,7 +52,10 @@ const App = (props) => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
       .catch(e => {
-        alert(`The note ${note.content} does not exist in the server.`)
+        setErrorMsg(`The note ${note.content} does not exist in the server.`)
+        setTimeout(() => {
+          setErrorMsg(null)
+        }, 5000)
         setNotes(notes.filter(note => note.id !== id))
       })
   }
@@ -57,6 +63,7 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMsg} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           Show {showAll ? "Important" : "All"}

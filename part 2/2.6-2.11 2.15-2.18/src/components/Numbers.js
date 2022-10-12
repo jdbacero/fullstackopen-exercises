@@ -1,6 +1,6 @@
 import phonebookService from "../service/phonebook"
 import { useEffect, useState } from "react"
-const Numbers = ({ setPersons, persons, nameFilter }) => {
+const Numbers = ({ setPersons, persons, nameFilter, setNotification }) => {
     const [personToShow, setPersonToShow] = useState(persons)
     // let personToShow = nameFilter.length === 0 ? persons : persons.filter(value => value.name.toLowerCase().includes(nameFilter.toLowerCase()))
     useEffect(() => {
@@ -14,13 +14,12 @@ const Numbers = ({ setPersons, persons, nameFilter }) => {
             if (window.confirm(`Are you sure you want to delete ${personToShow[personIndex].name}?`)) {
                 phonebookService.remove(id)
                     .then(() => {
-                        console.log("deleting")
+                        setNotification({ message: `Deleted ${personToShow[personIndex].name}.`, type: "error" })
                         setPersons(persons.flatMap(person => person.id !== id ? person : []))
-                        console.log(personIndex, persons)
                     })
                     .catch(e => {
                         console.log(e)
-                        alert("Something went wrong.")
+                        setNotification({ message: `Something went wrong.`, type: "error" })
                     })
             }
         }
