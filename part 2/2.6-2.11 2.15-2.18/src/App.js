@@ -1,22 +1,20 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState, useEffect, useRef } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Numbers from './components/Numbers'
+import phonebookService from './service/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    phonebookService.getAll()
+      .then(persons => {
+        setPersons(persons)
       })
   }, [])
 
   const [nameFilter, setNameFilter] = useState('')
-
-  const personToShow = nameFilter.length === 0 ? persons : persons.filter(value => value.name.toLowerCase().includes(nameFilter.toLowerCase()))
 
   return (
     <div>
@@ -25,7 +23,7 @@ const App = () => {
       <PersonForm persons={persons} setPersons={setPersons} />
 
       <h2>Numbers</h2>
-      <Numbers personToShow={personToShow} />
+      <Numbers setPersons={setPersons} persons={persons} nameFilter={nameFilter} />
     </div>
   )
 }
