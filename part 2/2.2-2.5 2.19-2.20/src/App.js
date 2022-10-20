@@ -52,6 +52,7 @@ const App = (props) => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
       .catch(e => {
+        console.log(e)
         setErrorMsg(`The note ${note.content} does not exist in the server.`)
         setTimeout(() => {
           setErrorMsg(null)
