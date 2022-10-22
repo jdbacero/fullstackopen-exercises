@@ -14,12 +14,12 @@ const Numbers = ({ setPersons, persons, nameFilter, setNotification }) => {
             if (window.confirm(`Are you sure you want to delete ${personToShow[personIndex].name}?`)) {
                 phonebookService.remove(id)
                     .then(() => {
-                        setNotification({ message: `Deleted ${personToShow[personIndex].name}.`, type: "error" })
+                        setNotification({ message: `Deleted ${personToShow[personIndex].name}.`, type: "error notification" })
                         setPersons(persons.flatMap(person => person.id !== id ? person : []))
                     })
                     .catch(e => {
                         console.log(e)
-                        setNotification({ message: `Something went wrong.`, type: "error" })
+                        setNotification({ message: `Error: ${e.response.data.error}`, type: "error notification" })
                     })
             }
         }

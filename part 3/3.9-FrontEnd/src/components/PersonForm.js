@@ -15,10 +15,11 @@ const PersonForm = ({ persons, setPersons, setNotification }) => {
                 phonebookService.update(person.id, { ...person, number: newPerson.number })
                     .then(updatedPerson => {
                         setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
-                        setNotification({ message: `Updated ${updatedPerson.name}'s number.`, type: "update" })
+                        setNotification({ message: `Updated ${updatedPerson.name}'s number.`, type: "notification update" })
                     })
                     .catch(e => {
-                        setNotification({ message: `Information of ${person.name} has already been removed from the server.`, type: 'error' })
+                        console.log(e)
+                        setNotification({ message: `Error: ${e.response.data.error}`, type: 'notification error' })
                     })
             }
             setNewPerson({ name: '', number: '' })
@@ -29,7 +30,11 @@ const PersonForm = ({ persons, setPersons, setNotification }) => {
             .then(person => {
                 setPersons(persons.concat({ ...person }))
                 setNewPerson({ name: '', number: '' })
-                setNotification({ message: `Added ${person.name}`, type: "create" })
+                setNotification({ message: `Added ${person.name}`, type: "notification create" })
+            })
+            .catch(e => {
+                console.log(e)
+                setNotification({ message: `Error: ${e.response.data.error}`, type: 'notification error' })
             })
     }
 
