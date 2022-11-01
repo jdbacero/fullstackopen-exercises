@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/notes/63545566a11c2a5e093730c7
+Content-Type: application/json
+
+{
+    "content" : "aa",
+    "important": true
+}
