@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const jwt = require('jsonwebtoken')
 
 const blogs = [
     {
@@ -19,10 +20,30 @@ const blogs = [
     }
 ]
 
+let token, user
+
 beforeEach(async () => {
+    console.log('logging in...')
+    const login = await api.post('/api/login')
+        .send({
+            username: 'steve',
+            password: 'password'
+        })
+    console.log('token:', login.body)
+    token = login.body.token
+    user = jwt.verify(token, process.env.SECRET)
+
+    console.log('Logged in', user, ' with token', token)
+
     await Blog.deleteMany({})
+
     const blogObj = blogs.map(blog => new Blog(blog))
-    const promiseArr = blogObj.map(blog => blog.save())
+    const promiseArr = blogObj.map(blog => {
+        return api.post('/api/blogs')
+            .send(blog)
+            .set('Authorization', `bearer ${token}`)
+    })
+    console.log('inserting blogs...')
     await Promise.all(promiseArr)
 })
 
@@ -85,6 +106,7 @@ test('verifies that if the likes property is missing from the request, it will d
 
     const response = await api.post('/api/blogs')
         .send(new_blog)
+        .set('Authorization', `bearer ${token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -106,6 +128,7 @@ test('verifies that if the title or url properties are missing from the request 
 
     await api.post('/api/blogs/')
         .send(new_blogs[0])
+        .set('Authorization', `bearer ${token}`)
         .expect(400)
 })
 
@@ -114,6 +137,10 @@ test('verifies if blog can and has been deleted', async () => {
     const blog_id = blogsInDb[0]._id.toString()
 
     await api.delete(`/api/blogs/${blog_id}`)
+        .expect(401)
+
+    await api.delete(`/api/blogs/${blog_id}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
 
     const currentBlogs = await Blog.find({})
