@@ -1,0 +1,26 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYzNjBhMzRiMzk1Mzk4NWNmZDNmYjZmMiIsImlhdCI6MTY2NzM0OTc2OH0.uM1NtZmuCXDxPdL71e87Epi1W2arhAX53qnn5NVFfjA
+{
+    "title": "Matchchang",
+    "author": "Teia",
+    "url": "how-matcha-is-the-best-dog",
+    "likes": 10
+}
+
+#####
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpkYmFjZXJvIiwiaWQiOiI2MzYxZGZiZDkyZWY2MGE4OGM2ZmI2ODEiLCJpYXQiOjE2Njc0MjUwMTUsImV4cCI6MTY2NzQyODYxNX0.5jOPmDKusMsypjyuY7p-Qc0vk63qBPfpJXoHJDsjLjA
+
+{
+    "title": "nobnob",
+    "author": "Jorex",
+    "url": "how-bonbon-is-annoying-cat",
+    "likes": 10
+}
+#####
+
+DELETE http://localhost:3003/api/blogs/63569fb59439ab1fb05934ae
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpkYmFjZXJvIiwiaWQiOiI2MzYxZGZiZDkyZWY2MGE4OGM2ZmI2ODEiLCJpYXQiOjE2Njc0MjYwOTYsImV4cCI6MTY2NzQyOTY5Nn0.QlCYpLthARFiGiFp6FJqSKPJjsKdSCcr8eqoLNLv2W4
